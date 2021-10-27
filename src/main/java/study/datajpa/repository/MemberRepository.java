@@ -15,5 +15,5 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
     //getOne(ID) : 엔티티를 프록시로 조회, 내부에서 EntityManager.getReference()호출
     //findAll() : 모든 엔티티를 조회, 정렬(Sort)이나 페이징(Pageable)조건을 파라미터로 제공
 
-    List<Member> findByUsername(String username);
+    List<Member> findByUsernameAndAgeGreaterThan(String username, int age);
 }
