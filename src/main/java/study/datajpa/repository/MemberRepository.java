@@ -1,6 +1,8 @@
 package study.datajpa.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import study.datajpa.entity.Member;
 
 import java.util.List;
@@ -16,4 +18,7 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
     //findAll() : 모든 엔티티를 조회, 정렬(Sort)이나 페이징(Pageable)조건을 파라미터로 제공
 
     List<Member> findByUsernameAndAgeGreaterThan(String username, int age);
+
+    //@Query(name = "Member.findByUsername")
+    List<Member> findByUsername(@Param("username") String username);
 }
