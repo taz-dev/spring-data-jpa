@@ -1,14 +1,14 @@
 package study.datajpa.repository;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import study.datajpa.dto.MemberDto;
 import study.datajpa.entity.Member;
 
-import javax.swing.text.html.Option;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -45,7 +45,17 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
     @Query("select m from Member m where m.username in :names")
     List<Member> findByNames(@Param("names") Collection<String> names);
 
+    //반환 타입
     List<Member> findListByUsername(String username); //컬렉션
     Member findMemberByUsername(String username); //단건
     Optional<Member> findOptionalByUsername(String username); //단건 Optional
+
+    //페이징과 정렬
+    //@Query(value = "select m from Member m left join m.team t",
+    //        countQuery = "select count(m) from Member m")
+    //1. Page -> 추가 count 쿼리 결과를 포함하는 페이징
+    Page<Member> findByAge(int age, Pageable pageable);
+    //2. Slice -> 추가 count 쿼리 없이 다음 페이지만 확인 가능(내부적으로 limit + 1조회)
+    //Slice<Member> findByAge(int age, Pageable pageable);
+    //3. List -> 추가 count 쿼리 없이 결과만 반환
 }
