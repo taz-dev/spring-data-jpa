@@ -11,6 +11,7 @@ import study.datajpa.entity.Team;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -129,15 +130,23 @@ public class MemberRepositoryTest {
     }
 
     @Test
-    public void findByNames() {
+    public void returnType() {
         Member m1 = new Member("AAA", 10);
         Member m2 = new Member("BBB", 20);
         memberRepository.save(m1);
         memberRepository.save(m2);
 
-        List<Member> result = memberRepository.findByNames(Arrays.asList("AAA", "BBB"));
-        for (Member member : result) {
-            System.out.println("member = " + member);
-        }
+        //컬렉션 조회일 경우
+        List<Member> result = memberRepository.findListByUsername("asdasd");
+        System.out.println("result = " + result.size()); //(result = 0)
+
+        //단건 조회일 경우 -> 존재하지 않는 값은 null 반환(주의!)
+        Member findMember = memberRepository.findMemberByUsername("asdasd");
+        System.out.println("findMember = " + findMember); //(findMember = null)
+
+        //Optional로 처리하자!(DB에 값이 있을 수도 있고 없을 수도 있을 때 사용)
+        Optional<Member> member = memberRepository.findOptionalByUsername("asdasd");
+        System.out.println("member = " + member); //(member = Optional.empty)
     }
+
 }
