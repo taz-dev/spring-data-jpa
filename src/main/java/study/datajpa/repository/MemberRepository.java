@@ -3,6 +3,7 @@ package study.datajpa.repository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import study.datajpa.dto.MemberDto;
@@ -58,4 +59,9 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
     //2. Slice -> 추가 count 쿼리 없이 다음 페이지만 확인 가능(내부적으로 limit + 1조회)
     //Slice<Member> findByAge(int age, Pageable pageable);
     //3. List -> 추가 count 쿼리 없이 결과만 반환
+
+    //벌크성 수정 쿼리
+    @Modifying(clearAutomatically = true) //JPA의 executeUpdate()를 실행하기 위해 필요한 어노테이션
+    @Query("update Member m set m.age = m.age + 1 where m.age >= :age")
+    int bulkAgePlus(@Param("age") int age);
 }
